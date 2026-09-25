@@ -1,0 +1,31 @@
+import React, { useEffect } from 'react'
+
+export default function Modal({ title, onClose, children, wide = false }) {
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div className="modal-overlay" onMouseDown={onClose}>
+      <div
+        className={`modal-panel ${wide ? 'modal-panel--wide' : ''}`}
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+      >
+        <div className="modal-header">
+          <h2>{title}</h2>
+          <button type="button" className="icon-button" aria-label="Close" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+        <div className="modal-body">{children}</div>
+      </div>
+    </div>
+  )
+}
